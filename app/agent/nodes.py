@@ -1,5 +1,6 @@
 import requests
 import logging
+import os
 from app.services.stt import transcribe_audio
 from app.services.summarizer import summarize_text
 from app.services.notifier import notify_user
@@ -11,7 +12,18 @@ def fetch_and_transcribe(state):
     """Download recording from Twilio and transcribe it"""
     try:
         logger.info(f"Fetching recording: {state['recording_url']}")
-        audio = requests.get(state["recording_url"] + ".wav", timeout=30).content
+        
+        # Twilio recordings require authentication
+        account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+        auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+        
+        response = requests.get(
+            state["recording_url"] + ".wav",
+            auth=(account_sid, auth_token),
+            timeout=30
+        )
+        response.raise_for_status()
+        audio = response.content
         logger.info(f"Downloaded {len(audio)} bytes")
         
         logger.info("Starting transcription...")
