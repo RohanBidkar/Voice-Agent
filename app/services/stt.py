@@ -23,5 +23,14 @@ def transcribe_audio(audio_bytes: bytes) -> str:
         timeout=30
     )
 
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        if response.status_code == 401:
+            raise ValueError(
+                "ElevenLabs API key is invalid or missing. "
+                "Please check ELEVENLABS_API_KEY environment variable."
+            ) from e
+        raise
+    
     return response.json()["text"]

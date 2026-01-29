@@ -5,7 +5,7 @@ import os
 def summarize_text(text: str) -> str:
     """Summarize text using Groq LLM"""
     llm = ChatGroq(
-        model="llama3-8b-8192",
+        model="llama-3.3-70b-versatile",
         temperature=0.2,
         api_key=os.getenv("GROQ_API_KEY")
     )
