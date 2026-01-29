@@ -16,7 +16,7 @@ async def incoming_call():
     logger.info("Incoming call received")
     response = VoiceResponse()
     response.say(
-        "Rohan is unavailable. Please state the purpose of your call after the beep.",
+        "I am Rohan's assistant he's unavailable. बीप के बाद मुज़हे कॉल करने की वजह बताये",
         voice="alice"
     )
     response.record(
